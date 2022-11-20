@@ -1,7 +1,7 @@
 from typing import Dict, Tuple
 import numpy as np
 import random
-from .model import Machine, Tape
+from model import Machine, Tape
 
 
 def sample(population: dict, nsample: int = 1) -> list:
@@ -24,7 +24,7 @@ def sample(population: dict, nsample: int = 1) -> list:
     return samples
 
 
-noise = 0.
+noise = 0.01
 dm = 0.1    # remove rate of old machines
 dt = 0.1    # remove rate of old tapes
 N = 100     # capacity
@@ -35,7 +35,7 @@ tape_population = {}
 
 # Init
 machine_population[Machine.from_tape(Tape(1))] = 50
-# machine_population[Machine.from_tape(Tape(3))] = 5
+machine_population[Machine.from_tape(Tape(9))] = 50
 tape_population[Tape(1)] = 40
 tape_population[Tape(3)] = 50
 tape_population[Tape(5)] = 20
@@ -80,7 +80,7 @@ for g in range(100):
         if tape_population[t] < 1:
             tape_population.pop(t)
 
-    print(g)
+    print(f'---- Generation {g} ----')
     for m in machine_population:
-        print(m)
+        print(f'M{m} population={machine_population[m]}')
 
