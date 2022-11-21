@@ -1,4 +1,5 @@
 import random
+import math
 
 
 class Tape:
@@ -7,7 +8,8 @@ class Tape:
         self.tape = hex_ - (hex_>>bits<<bits)
 
     def __str__(self) -> str:
-        return format(self.tape, f'0{self._bits}b')
+        return format(self.tape, f'0{math.ceil(self._bits/4)}x')
+        # return format(self.tape, f'0{self._bits}b')
 
     def copy(self) -> 'Tape':
         return Tape(self.tape, self._bits)
@@ -42,7 +44,7 @@ class Machine:
         self.initial_state = 1
 
     def __str__(self) -> str:
-        h = (self.tranT<<12) + (self.tranM<<8) + (self.head<<4) + self.tail
+        h = self.get_hex()
         # return format(h, '016b')
         return format(h, '04x')
 
@@ -69,6 +71,9 @@ class Machine:
         m.head = (tape.get_bit_from_left(8) << 3) + (tape.get_bit_from_left(10) << 2) + (tape.get_bit_from_left(12) << 1) + (tape.get_bit_from_left(14))
         m.tail = (tape.get_bit_from_left(9) << 3) + (tape.get_bit_from_left(11) << 2) + (tape.get_bit_from_left(13) << 1) + (tape.get_bit_from_left(15))
         return m
+
+    def get_hex(self) -> int:
+        return (self.tranT<<12) + (self.tranM<<8) + (self.head<<4) + self.tail
 
     def rewrite_tape(self, tape: Tape, noise: float = 0) -> Tape:
         ihead = tape.search(self.head)
